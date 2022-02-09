@@ -80,3 +80,22 @@ private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
   - 기존에는 개발자가 'AppConfig'를 사용해서 직접 객체를 생성하고 DI를 했지만, 이제부터는 스프링 컨테이너를 통해 사용한다.
   - 스프링 컨테이너는 '@Configuration'이 붙은 'AppConfig'를 설정(구성) 정보로 사용한다. 여기서 '@Bean'이라 적힌 메서드를 모두 호출해서 반환된 객체를 스프링 컨테이너에 등록한다. 이렇게 스프링 컨테이너에 등록된 객체를 스프링 빈이라 한다.
   - 기존에는 개발자가 직접 자바코드로 모든 것을 했다면 이제부터는 스프링 컨테이너에 객체를 스프링 빈으로 등록하고, 스프링 먼테이너에서 스프링 빈을 찾아서 사용하도록 변경되었다.
+
+### 스프링 컨테이너와 스프링 빈
+
+- 스프링 컨테이너가 생성되는 과정
+  ```
+  ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+  ```
+- ApplicationContext를 스프링 컨테이너라 한다. ApplicationContext는 인터페이스이다.
+- 스프링 컨테이너는 XML을 기반으로 만들 수 있고, 애노테이션 기반의 자바 설정 클래스로 만들 수 있다.
+- 위에서 AppConfig를 사용했던 방식이 애노테이션 기반의 자바 설정 클래스로 스프링 컨테이너를 만든 것이다.
+- 스프링 컨테이너의 생성 과정
+  1. 스프링 컨테이너 생성
+     ![spring1](https://user-images.githubusercontent.com/62706198/153218270-52c700ba-5d92-4126-9857-9b701b55b681.PNG)
+  2. 스프링 빈 등록
+     ![spring2](https://user-images.githubusercontent.com/62706198/153218328-0cd801ea-12cc-4fb9-9f08-bb5c9c06e9f6.PNG)
+  3. 스프링 빈 의존관계 설정 - 준비
+     ![spring3](https://user-images.githubusercontent.com/62706198/153218376-614c6f38-00fb-475f-b3c3-97c76c1f2dce.PNG)
+  4. 스프링 빈 의존관계 설정 - 완료
+     ![spring4](https://user-images.githubusercontent.com/62706198/153218435-e958b517-577a-4507-86ca-9ea91d62c9ce.PNG)
