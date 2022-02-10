@@ -91,11 +91,34 @@ private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
 - 스프링 컨테이너는 XML을 기반으로 만들 수 있고, 애노테이션 기반의 자바 설정 클래스로 만들 수 있다.
 - 위에서 AppConfig를 사용했던 방식이 애노테이션 기반의 자바 설정 클래스로 스프링 컨테이너를 만든 것이다.
 - 스프링 컨테이너의 생성 과정
-  1. 스프링 컨테이너 생성
-     ![spring1](https://user-images.githubusercontent.com/62706198/153218270-52c700ba-5d92-4126-9857-9b701b55b681.PNG)
-  2. 스프링 빈 등록
+  1. 스프링 컨테이너 생성   
+     ![spring1](https://user-images.githubusercontent.com/62706198/153409808-9d591a52-ca47-4c6a-98e2-dd99a52bd27e.JPG)
+  2. 스프링 빈 등록   
      ![spring2](https://user-images.githubusercontent.com/62706198/153218328-0cd801ea-12cc-4fb9-9f08-bb5c9c06e9f6.PNG)
-  3. 스프링 빈 의존관계 설정 - 준비
+  3. 스프링 빈 의존관계 설정 - 준비   
      ![spring3](https://user-images.githubusercontent.com/62706198/153218376-614c6f38-00fb-475f-b3c3-97c76c1f2dce.PNG)
-  4. 스프링 빈 의존관계 설정 - 완료
+  4. 스프링 빈 의존관계 설정 - 완료   
      ![spring4](https://user-images.githubusercontent.com/62706198/153218435-e958b517-577a-4507-86ca-9ea91d62c9ce.PNG)
+     
+
+#### BeanFactory와 ApplicationContext
+- BeanFactory
+  - 스프링 컨테이너의 최상위 인터페이스다.
+  - 스프링 빈을 관리하고 조회하는 역할을 담당한다.
+  - getBean()을 제공한다.
+- ApplicationContext
+  - contextFactory 기능을 모두 상속받아서 제공한다.
+  - 빈을 관리하고 검색하는 기능을 BeanFactory가 제공해준다.
+  - 메시지소스를 활용한 국제화 기능: 한국에서 들어오면 한국어로, 영어권에서 들어오면 영어로 출력
+  - 환경변수: 로컬, 개발, 운영등을 구분해서 처리
+  - 애플리케이션 이벤트: 이벤트를 발행하고 구독하는 모델을 편리하게 지원
+  - 편리한 리소스 조회: 파일, 클래스패스, 외부 등에서 리소스를 편리하게 조회
+  
+#### 다양한 설정 형식 지원 - 자바코드, XML
+- 스프링 컨테이너는 다양한 형식의 정보를 받아드릴 수 있게 유연하게 설계되어 있다. (자바코드, XML, Groovy 등등)
+- 애노테이션 기반 자바 코드 설정 사용
+  - 'new AnnotationConfigApplicationContext(AppConfig.class)'
+  - 'AnnotationConfigApplicationContext' 클래스를 사용하면서 자바 코드로된 설정 정보를 넘기면 된다.
+- XML 설정 사용
+  - 최근에는 스프링 부트를 많이 사용하면서 XML 기반의 설정은 잘 사용하지 않는다. 아직 많은 레거시 프로젝트 들이 XML로 되어있고, 또 XML을 사용하면 컴파일 없이 빈 설정 정보를 변경할 수 있는 장점이 있다.
+  - 'GenericXmlApplicationContext'를 사용하면서 'xml'설정 파일을 넘기면 된다.
