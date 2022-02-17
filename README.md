@@ -189,3 +189,15 @@ private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
   - @Service: 스프링 비즈니스 로직에서 사용.
   - @Repository: 스프링 데이터 접근 계층에서 사용. 스프링 데이터 접근 계층으로 인식하고, 데이터 계층의 예외를 스프링 예외로 변환해준다.
   - @Configuration: 스프링 설정 정보에서 사용. 스프링 빈이 싱글톤을 유지하도록 추가 처리를 한다.
+
+#### 필터
+- includeFilters: 컴포넌트 스캔 대상을 추가로 지정한다.
+- excludeFilters: 컴포넌트 스캔에서 제외할 대상을 지정한다.
+- FilterType 옵션
+  - ANNOTATION: 기본값, 애노테이션을 인식해서 동작한다. ex) org.example.SomeAnnotation
+  - ASSIGNABLE_TYPE: 지정한 타입과 자식 타입을 인식해서 동작한다. ex) org.example.SomeClass
+  - ASPECTJ: AspectJ 패턴 사용 ex) org.example..*Service+
+  - REGEX: 정규표현식 ex) org\.example\.Default.*
+  - CUSTOM: TypeFilter 이라는 인터페이스를 구현해서 처리 ex) org.example.MyTypeFilter
+- 참고: @Component면 충분하기 때문에, includeFilters를 사용할 일은 거의 없다. excludeFilters는 여러가지 이유로 간혹 사용할 때가 있지만 많지는 않다. 최근 스프링 부트는 컴포넌트 스캔을 기본으로 제공하므로, 옵션을 변경하면서 사용하기 보다는 스프링의 기본 설정에 최대한 맞추어 사용하는 것을 권장한다.
+  
