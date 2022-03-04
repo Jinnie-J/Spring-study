@@ -452,4 +452,16 @@ private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
   - 매번 사용할 때 마다 의존관계 주입이 완료된 새로운 객체가 필요하면 사용하면 된다. 그런데 실무에서 웹 애플리케이션을 개발해보면, 싱글톤 빈으로 대부분의 문제를 해결할 수 있기 때문에 프로토타입 빈을 직접적으로 사용하는 일은 매우 드물다.
   - ObjectProvider, JSR 330 Provider 등은 프로토타입 뿐만 아니라 DL이 필요한 경우는 언제든지 사용할 수 있다.
   
+#### 웹 스코프
+- 싱글톤은 스프링 컨테이너의 시작과 끝까지 함께하는 매우 긴 스코프이고, 프로토타입은 생성과 의존관계 주입, 그리고 초기화까지만 진행하는 특별한 스코프이다.
+- 웹 스코프의 특징
+  - 웹 스코프는 웹 환경에서만 동작한다.
+  - 웹 스코프는 프로토타입과 다르게 스프링이 해당 스코프의 종료시점까지 관리한다. 따라서 종료 메서드가 호출된다.
+- 웹 스코프의 종류
+  - request: HTTP 요청 하나가 들어오고 나갈 때 까지 유지되는 스코프, 각각의 HTTP 요청마다 별도의 빈 인스턴스가 생성되고, 관리된다.
+  - sesion: HTTP Session과 동일한 생명주기를 가지는 스코프
+  - application: 서블릿 컨텍스트(ServletContext)와 동일한 생명주기를 가지는 스코프
+  - websocket: 웹 소켓과 동일한 생명주기를 가지는 스코프
+- HTTP request 요청 당 각각 할당되는 request 스코프  
+  ![httprequest](https://user-images.githubusercontent.com/62706198/156782709-28d50bdc-99de-43f7-9120-b34716abf57f.JPG)   
   
