@@ -427,3 +427,29 @@ private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
   - clientA -> prototypeBean@x01
   - clientB -> prototypeBean@x02
   - 물론 사용할 때 마다 새로 생성되는 것은 아니다.
+  
+#### 프로토타입 스코프 - 싱글톤 빈과 함께 사용시 Provider로 문제 해결
+- 스프링 컨테이너에 요청: 가장 간단한 방법은 빈이 프로토타입을 사용할 때 마다 스프링 컨테이너에 새로 요청하는 것이다.
+- 의존관계를 외부에서 주입(DI)받는게 아니라 직접 필요한 의존관계를 찾는 것을 Dependency Lookup(DL) 의존관계 조회(탐색) 이라한다.
+- 그런데 이렇게 스프링의 애플리케이션 컨텍스트 전체를 주입받게 되면, 스프링 컨테이너에 종속적인 코드가 되고, 단위 테스트도 어려워진다. 
+
+- ObjectFactory, ObjectProvider
+  - 저장한 빈을 컨테이너에서 대신 찾아주는 DL 서비스를 제공하는 것이 바로 ObjectProvider이다.
+  - prototypeBeanProvider()을 통해서 항상 새로운 프로토타입 빈이 생성되는 것을 확인할 수 있다.
+  - ObjectProvider의 getObject()를 호출하면 내부에서는 스프링 컨테이너를 통해 해당 빈을 찾아서 반환한다. (DL)
+  - 스프링이 제공하는 기능을 사용하지만, 기능이 단순하므로 단위테스트를 만들거나 mock 코드를 만들기는 훨씬 쉬워진다.
+  - ObjectFactory: 기능이 단순, 별도의 라이브러리 필요 없음, 스프링에 의존
+  - ObjectProvider: ObjectFactory 상속, 옵션, 스트림 처리등 편의 기능이 많고, 별도의 라이브러리 필요 없음, 스프링에 의존
+  
+
+- JSR-330 Provider
+  - 마지막 방법은 javax.inject.Provider라는 JSR-330 자바 표준을 사용하는 방법이다.
+  - 실행해보면 'provider.get()'을 통해서 항상 새로운 프로토타입 빈이 생성되는 것을 확인할 수 있다.
+  - provider의 get()을 호출하면 내부에서는 스프링 컨테이너를 통해 해당 빈을 찾아서 반환한다.(DL)
+  - 자바 표준이고, 기능이 단순하므로 단위테스트를 만들거나 mock 코드를 만들기는 훨씬 쉬워진다.
+  
+- 정리
+  - 매번 사용할 때 마다 의존관계 주입이 완료된 새로운 객체가 필요하면 사용하면 된다. 그런데 실무에서 웹 애플리케이션을 개발해보면, 싱글톤 빈으로 대부분의 문제를 해결할 수 있기 때문에 프로토타입 빈을 직접적으로 사용하는 일은 매우 드물다.
+  - ObjectProvider, JSR 330 Provider 등은 프로토타입 뿐만 아니라 DL이 필요한 경우는 언제든지 사용할 수 있다.
+  
+  
