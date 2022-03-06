@@ -465,3 +465,17 @@ private final DiscountPolicy discountPolicy = new RateDiscountPolicy();
 - HTTP request 요청 당 각각 할당되는 request 스코프  
   ![httprequest](https://user-images.githubusercontent.com/62706198/156782709-28d50bdc-99de-43f7-9120-b34716abf57f.JPG)   
   
+#### request 스코프 예제 개발
+- 동시에 여러 HTTP 요청이 오면 정확히 어떤 요청이 남긴 로그인지 구분하기 어렵다. 이럴때 사용하기 좋은 것이 바로 request 스코프이다.
+- @Scope(value = "request") 를 사용해서 request 스코프로 지정했다. 이제 이 빈은 HTTP 요청 당 하나씩 생성되고, HTTP 요청이 끝나는 시점에 소멸된다.
+- 이 빈이 생성되는 시점에 자동으로 @PostConstruct 초기화 메서드를 사용해서 uuid를 생성해서 저장해둔다. 이 빈은 HTTP 요청 당 하나씩 생성되므로, uuid를 저장해두면 다른 HTTP 요청과 구분할 수 있다.
+- 이 빈이 소멸되는 시점에 @PreDestroy를 사용해서 종료 메세지를 남긴다.
+- requestURL은 이 빈이 생성되는 시점에는 알 수 없으므로, 외부에서 setter로 입력 받는다.
+- 이 상태로 스프링 애플리케이션을 실행 시키면 오류가 발생한다. 스프링 애플리케이션을 실행하는 시점에 싱글톤 빈은 생성해서 주입이 가능하지만, request 스코프 빈은 아직 생성되지 않는다. 이 빈은 실제 고객의 요청이 와야 생성할 수 있다.
+
+#### 스코프와 Provider
+- 첫번째 해결방법은 Provider를 사용하는 것이다.
+- ObjectProvider 덕분에 ObjectProvider.getObject()를 호출하는 시점까지 request scope 빈의 생성을 지연할 수 있다.
+- ObjectProvider.getObject()를 호출하는 시점에는 HTTP 요청이 진행중이므로 request scope 빈의 생성이 정상 처리된다.
+- ObjectProvider.getObject()를 LogDemoController, LogDemoService에서 각각 한번씩 따로 호출해도 같은 HTTP 요청이면 같은 스프링 빈이 반환된다.
+
